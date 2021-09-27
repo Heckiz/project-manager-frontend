@@ -1,4 +1,4 @@
-export interface Proyect {
+export interface Project {
     name: string,
     description: string,
     project_manager: string,
