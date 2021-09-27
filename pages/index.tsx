@@ -3,8 +3,8 @@ import Head from "next/head";
 import { Box } from "@chakra-ui/react";
 import { Project } from "../interfaces/projects";
 import ProjectCard from "../components/ProjectCard/ProjectCard";
-import axios from "axios";
 import Link from "next/link";
+import { getProjects } from "../services/api";
 
 const Home: NextPage<any> = ({ data }) => {
   return (
@@ -29,7 +29,7 @@ const Home: NextPage<any> = ({ data }) => {
 export default Home;
 
 export const getStaticProps: GetStaticProps = async () => {
-  const { data } = await axios.get("http://localhost:1337/projects");
+  const data = await getProjects()
   return {
     props: {
       data,

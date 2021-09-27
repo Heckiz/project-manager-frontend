@@ -34,7 +34,7 @@ export interface Picture {
   updated_at: Date;
 }
 
-export interface ProjectManager {
+export interface People {
   id: number;
   name: string;
   published_at: Date;
@@ -43,22 +43,14 @@ export interface ProjectManager {
   picture: Picture;
 }
 
-export interface AsignedTo {
-  id: number;
-  name: string;
-  published_at: Date;
-  created_at: Date;
-  updated_at: Date;
-  picture: Picture;
-}
 
 export interface Project {
-  id: number;
+  id: string;
   name: string;
   description: string;
   status: boolean;
-  project_manager: ProjectManager;
-  asigned_to: AsignedTo;
+  project_manager: People;
+  assigned_to: People;
   published_at: Date;
   created_at: Date;
   updated_at: Date;

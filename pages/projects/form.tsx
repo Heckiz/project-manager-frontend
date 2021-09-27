@@ -8,22 +8,38 @@ import {
   Button,
   Select,
 } from "@chakra-ui/react";
-import { FormValues } from "../../interfaces/forms";
+import { createProject, getPeople, getPeopleId } from "../../services/api";
+import { GetStaticProps, NextPage } from "next";
+import { People, Project } from "../../interfaces/projects";
 
-const Form = () => {
+const Form: NextPage<any> = ({ data }) => {
   const {
     handleSubmit,
     register,
-    formState: { errors, isSubmitting},
+    formState: { errors, isSubmitting },
   } = useForm();
 
-  function onSubmit(values: FormValues) {
-    console.log(values);
+  async function onSubmit(values: Project) {
+    const projectManager = await getPeopleId(String(values.project_manager));
+    const assignedTo = await getPeopleId(String(values.assigned_to));
+
+    values.project_manager = projectManager;
+    values.assigned_to = assignedTo;
+
+    try {
+      await createProject(values);
+    } catch (error) {
+      console.log(error);
+    }
+    
   }
+  
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
+      {/*  */}
+
       <FormControl isInvalid={errors.name}>
-        <FormLabel htmlFor="name">First name</FormLabel>
+        <FormLabel htmlFor="name">Project Name</FormLabel>
         <Input
           id="name"
           placeholder="name"
@@ -35,6 +51,8 @@ const Form = () => {
           {errors.name && errors.name.message}
         </FormErrorMessage>
       </FormControl>
+
+      {/*  */}
 
       <FormControl isInvalid={errors.description}>
         <FormLabel htmlFor="name">Description</FormLabel>
@@ -50,6 +68,8 @@ const Form = () => {
         </FormErrorMessage>
       </FormControl>
 
+      {/*  */}
+
       <FormControl isInvalid={errors.project_manager}>
         <FormLabel>Project Manager</FormLabel>
         <Select
@@ -58,29 +78,42 @@ const Form = () => {
             required: "This is required",
           })}
         >
-          <option>United Arab Emirates</option>
-          <option>Nigeria</option>
+          {data.map((pm: People, indexPM: number) => (
+            <option value={pm.id} key={indexPM}>
+              {pm.name}
+            </option>
+          ))}
         </Select>
         <FormErrorMessage color="red" fontSize="small">
           {errors.project_manager && errors.project_manager.message}
         </FormErrorMessage>
       </FormControl>
 
+      {/*  */}
+
+
       <FormControl isInvalid={errors.assigned_to}>
-        <FormLabel>Project Manager</FormLabel>
+        <FormLabel>Assigned To</FormLabel>
         <Select
-          placeholder="Assigned to"
+          placeholder="Select assigned to"
           {...register("assigned_to", {
             required: "This is required",
           })}
         >
-          <option>United Arab Emirates</option>
-          <option>Nigeria</option>
+          {data.map((assigned_to: People, indexAssignedTo: number) => (
+            <option value={assigned_to.id} key={indexAssignedTo}>
+              {assigned_to.name}
+            </option>
+          ))}
         </Select>
         <FormErrorMessage color="red" fontSize="small">
           {errors.assigned_to && errors.assigned_to.message}
         </FormErrorMessage>
       </FormControl>
+
+      {/*  */}
+
+
       <Button mt={4} colorScheme="teal" isLoading={isSubmitting} type="submit">
         Submit
       </Button>
@@ -89,3 +122,12 @@ const Form = () => {
 };
 
 export default Form;
+
+export const getStaticProps: GetStaticProps = async () => {
+  const data = await getPeople();
+  return {
+    props: {
+      data,
+    },
+  };
+};
