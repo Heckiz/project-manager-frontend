@@ -4,11 +4,14 @@ import { Box } from "@chakra-ui/react";
 import { Project } from "../interfaces/projects";
 import ProjectCard from "../components/ProjectCard/ProjectCard";
 import axios from "axios";
+import Link from "next/link";
 
 const Home: NextPage<any> = ({ data }) => {
-  console.log(data);
   return (
     <Box>
+      <Link href="/projects/form">
+        <a>create project</a>
+      </Link>
       <Head>
         <title>My Projects</title>
         <meta name="description" content="List Projects" />
