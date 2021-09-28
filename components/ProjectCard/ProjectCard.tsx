@@ -1,5 +1,5 @@
 import {
-  Box,
+  Button,
   Flex,
   Menu,
   MenuButton,
@@ -10,9 +10,10 @@ import {
 import React, { FC } from "react";
 import { AiFillEdit, AiFillDelete } from "react-icons/ai";
 import { Project } from "../../interfaces/projects";
+import { deleteProject } from "../../services/api";
+import Link from "next/link";
 
 const ProjectCard: FC<{ project: Project }> = ({ project }) => {
-  console.log(project);
   return (
     <Flex p="5" m="5" border="2px solid black" justifyContent="space-between">
       <Flex flexDirection="column">
@@ -28,13 +29,23 @@ const ProjectCard: FC<{ project: Project }> = ({ project }) => {
       </Flex>
 
       <Menu>
-        <MenuButton>...</MenuButton>
+        <MenuButton as={Button}>...</MenuButton>
         <MenuList>
-          <MenuItem>
+          <MenuItem onClick={async () => await deleteProject(project.id)}>
             <AiFillDelete /> Delete
           </MenuItem>
           <MenuItem>
-            <AiFillEdit /> Edit
+            <Link
+              href={{
+                pathname: "/projects/form",
+                query: {
+                  id: project.id,
+                },
+              }}
+              passHref={true}
+            >
+              <AiFillEdit />
+            </Link>
           </MenuItem>
         </MenuList>
       </Menu>

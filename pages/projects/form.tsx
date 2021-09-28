@@ -8,16 +8,35 @@ import {
   Button,
   Select,
 } from "@chakra-ui/react";
-import { createProject, getPeople, getPeopleId } from "../../services/api";
+import {
+  createProject,
+  getPeople,
+  getPeopleId,
+  getProjectId,
+  updatedProject,
+} from "../../services/api";
 import { GetStaticProps, NextPage } from "next";
 import { People, Project } from "../../interfaces/projects";
+import { useRouter } from "next/router";
 
 const Form: NextPage<any> = ({ data }) => {
   const {
     handleSubmit,
     register,
     formState: { errors, isSubmitting },
+    setValue,
   } = useForm();
+
+  const router = useRouter();
+  (async function verifyEditable() {
+    if (router.query.id) {
+      const data = await getProjectId(String(router.query.id));
+      setValue("name", data.name);
+      setValue("description", data.description);
+      setValue("project_manager", data.project_manager.id);
+      setValue("assigned_to", data.assigned_to.id);
+    }
+  })();
 
   async function onSubmit(values: Project) {
     const projectManager = await getPeopleId(String(values.project_manager));
@@ -27,13 +46,15 @@ const Form: NextPage<any> = ({ data }) => {
     values.assigned_to = assignedTo;
 
     try {
-      await createProject(values);
+      router.query.id
+        ? await updatedProject(values, String(router.query.id))
+        : await createProject(values);
+      router.push("/");
     } catch (error) {
       console.log(error);
     }
-    
   }
-  
+
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       {/*  */}
@@ -55,7 +76,7 @@ const Form: NextPage<any> = ({ data }) => {
       {/*  */}
 
       <FormControl isInvalid={errors.description}>
-        <FormLabel htmlFor="name">Description</FormLabel>
+        <FormLabel htmlFor="description">Description</FormLabel>
         <Input
           id="description"
           placeholder="description"
@@ -91,7 +112,6 @@ const Form: NextPage<any> = ({ data }) => {
 
       {/*  */}
 
-
       <FormControl isInvalid={errors.assigned_to}>
         <FormLabel>Assigned To</FormLabel>
         <Select
@@ -112,7 +132,6 @@ const Form: NextPage<any> = ({ data }) => {
       </FormControl>
 
       {/*  */}
-
 
       <Button mt={4} colorScheme="teal" isLoading={isSubmitting} type="submit">
         Submit
