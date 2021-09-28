@@ -1,13 +1,6 @@
 import { useForm } from "react-hook-form";
-import React from "react";
-import {
-  FormErrorMessage,
-  FormLabel,
-  FormControl,
-  Input,
-  Button,
-  Select,
-} from "@chakra-ui/react";
+import React, { useState } from "react";
+import { Button, Flex, Box } from "@chakra-ui/react";
 import {
   createProject,
   getPeople,
@@ -18,14 +11,18 @@ import {
 import { GetStaticProps, NextPage } from "next";
 import { People, Project } from "../../interfaces/projects";
 import { useRouter } from "next/router";
+import HeaderPage from "../../components/HeaderPage/HeaderPage";
+import CustomInput from "../../components/CustomInput/CustomInput";
 
-const Form: NextPage<any> = ({ data }) => {
+const Form: NextPage<{ data: People[] }> = ({ data }) => {
   const {
     handleSubmit,
     register,
     formState: { errors, isSubmitting },
     setValue,
   } = useForm();
+
+  const [editable, setEditable] = useState<boolean>(false);
 
   const router = useRouter();
   (async function verifyEditable() {
@@ -35,6 +32,7 @@ const Form: NextPage<any> = ({ data }) => {
       setValue("description", data.description);
       setValue("project_manager", data.project_manager.id);
       setValue("assigned_to", data.assigned_to.id);
+      setEditable(true);
     }
   })();
 
@@ -49,94 +47,65 @@ const Form: NextPage<any> = ({ data }) => {
       router.query.id
         ? await updatedProject(values, String(router.query.id))
         : await createProject(values);
-      router.push("/");
+      router.push("/projects");
     } catch (error) {
       console.log(error);
     }
   }
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)}>
-      {/*  */}
+    <Flex flexDirection="column" textAlign="center">
+      <HeaderPage
+        backButton={true}
+        title={editable ? "Edit project" : "Add project"}
+      />
+      <Box p="6">
+        <form onSubmit={handleSubmit(onSubmit)}>
+          <CustomInput
+            data={data}
+            register={register}
+            errors={errors}
+            title="Project Name"
+            name="name"
+            type="input"
+          />
+          <CustomInput
+            data={data}
+            register={register}
+            errors={errors}
+            title="Description"
+            name="description"
+            type="input"
+          />
+          <CustomInput
+            data={data}
+            register={register}
+            errors={errors}
+            title="Project Manager"
+            name="project_manager"
+            type="select"
+          />
+          <CustomInput
+            data={data}
+            register={register}
+            errors={errors}
+            title="Assigned To"
+            name="assigned_to"
+            type="select"
+          />
 
-      <FormControl isInvalid={errors.name}>
-        <FormLabel htmlFor="name">Project Name</FormLabel>
-        <Input
-          id="name"
-          placeholder="name"
-          {...register("name", {
-            required: "This is required",
-          })}
-        />
-        <FormErrorMessage color="red" fontSize="small">
-          {errors.name && errors.name.message}
-        </FormErrorMessage>
-      </FormControl>
-
-      {/*  */}
-
-      <FormControl isInvalid={errors.description}>
-        <FormLabel htmlFor="description">Description</FormLabel>
-        <Input
-          id="description"
-          placeholder="description"
-          {...register("description", {
-            required: "This is required",
-          })}
-        />
-        <FormErrorMessage color="red" fontSize="small">
-          {errors.description && errors.description.message}
-        </FormErrorMessage>
-      </FormControl>
-
-      {/*  */}
-
-      <FormControl isInvalid={errors.project_manager}>
-        <FormLabel>Project Manager</FormLabel>
-        <Select
-          placeholder="Select project manager"
-          {...register("project_manager", {
-            required: "This is required",
-          })}
-        >
-          {data.map((pm: People, indexPM: number) => (
-            <option value={pm.id} key={indexPM}>
-              {pm.name}
-            </option>
-          ))}
-        </Select>
-        <FormErrorMessage color="red" fontSize="small">
-          {errors.project_manager && errors.project_manager.message}
-        </FormErrorMessage>
-      </FormControl>
-
-      {/*  */}
-
-      <FormControl isInvalid={errors.assigned_to}>
-        <FormLabel>Assigned To</FormLabel>
-        <Select
-          placeholder="Select assigned to"
-          {...register("assigned_to", {
-            required: "This is required",
-          })}
-        >
-          {data.map((assigned_to: People, indexAssignedTo: number) => (
-            <option value={assigned_to.id} key={indexAssignedTo}>
-              {assigned_to.name}
-            </option>
-          ))}
-        </Select>
-        <FormErrorMessage color="red" fontSize="small">
-          {errors.assigned_to && errors.assigned_to.message}
-        </FormErrorMessage>
-      </FormControl>
-
-      {/*  */}
-
-      <Button mt={4} colorScheme="teal" isLoading={isSubmitting} type="submit">
-        Submit
-      </Button>
-    </form>
+          <Button
+            textTransform="uppercase"
+            mt={4}
+            colorScheme="teal"
+            isLoading={isSubmitting}
+            type="submit"
+          >
+            {editable ? "Save Changes" : "Create Project"}
+          </Button>
+        </form>
+      </Box>
+    </Flex>
   );
 };
 
