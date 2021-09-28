@@ -1,6 +1,6 @@
 import type { GetStaticProps, NextPage } from "next";
 import Head from "next/head";
-import { Box,  Text } from "@chakra-ui/react";
+import { Box } from "@chakra-ui/react";
 import { Project } from "../../interfaces/projects";
 import ProjectCard from "../../components/ProjectCard/ProjectCard";
 import { getProjects } from "../../services/api";

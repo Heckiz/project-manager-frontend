@@ -2,7 +2,7 @@ import axios, { AxiosResponse } from "axios";
 import { Project, People } from "../interfaces/projects";
 
 const instance = axios.create({
-  baseURL: `http://localhost:1337/`,
+  baseURL: process.env.API_URL,
 });
 
 const responseBody = (response: AxiosResponse) => response.data;
@@ -16,17 +16,17 @@ const requests = {
   delete: (url: string) => instance.delete(url).then(responseBody),
 };
 
-const getProjects = (): Promise<Project[]> => requests.get("projects");
+const getProjects = (): Promise<Project[]> => requests.get("/projects");
 
 const getProjectId = (id: string): Promise<Project> =>
-  requests.get(`projects/${id}`);
+  requests.get(`/projects/${id}`);
 
-const getPeople = (): Promise<People[]> => requests.get("project-managers");
+const getPeople = (): Promise<People[]> => requests.get("/project-managers");
 
 const getPeopleId = (id: string): Promise<People> =>
-  requests.get(`project-managers/${id}`);
+  requests.get(`/project-managers/${id}`);
 
-const createProject = (project: Project) => requests.post("projects", project);
+const createProject = (project: Project) => requests.post("/projects", project);
 
 const deleteProject = (id: string) => requests.delete(`projects/${id}`);
 

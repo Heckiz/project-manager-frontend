@@ -1,6 +1,13 @@
 import { useForm } from "react-hook-form";
 import React, { useState } from "react";
-import { Button, Flex, Box } from "@chakra-ui/react";
+import {
+  Button,
+  Flex,
+  Box,
+  FormControl,
+  FormLabel,
+  Switch,
+} from "@chakra-ui/react";
 import {
   createProject,
   getPeople,
@@ -42,7 +49,7 @@ const Form: NextPage<{ data: People[] }> = ({ data }) => {
 
     values.project_manager = projectManager;
     values.assigned_to = assignedTo;
-
+    console.log(values);
     try {
       router.query.id
         ? await updatedProject(values, String(router.query.id))
@@ -93,6 +100,12 @@ const Form: NextPage<{ data: People[] }> = ({ data }) => {
             name="assigned_to"
             type="select"
           />
+          <FormControl display="flex" alignItems="center">
+            <FormLabel fontWeight="bold" fontSize="xl" htmlFor="status">
+              Status
+            </FormLabel>
+            <Switch id="status" />
+          </FormControl>
 
           <Button
             textTransform="uppercase"

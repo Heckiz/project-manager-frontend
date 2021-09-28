@@ -23,7 +23,7 @@ const CustomInput: FC<{
   type: "select" | "input";
 }> = ({ register, errors, data, title, name, type }) => {
   return (
-    <FormControl isRequired p="5" isInvalid={errors[name]}>
+    <FormControl isInvalid={errors[name]}>
       <FormLabel fontWeight="bold" fontSize="xl" htmlFor={`${name}`}>{title}</FormLabel>
       {type === "select" && (
         <Select

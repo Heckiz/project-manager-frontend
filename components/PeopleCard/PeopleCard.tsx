@@ -11,7 +11,7 @@ const PeopleCard: FC<{ name: string; picture: string }> = ({
         h="8vh"
         borderRadius="100%"
         alt="image"
-        src={`http://localhost:1337${picture}`}
+        src={`${process.env.API_URL}${picture}`}
       />
       <Text mx="2" fontWeight="bold">
         {name}
