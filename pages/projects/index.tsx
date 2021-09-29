@@ -1,4 +1,4 @@
-import type { GetStaticProps, NextPage } from "next";
+import type { GetServerSideProps, NextPage } from "next";
 import Head from "next/head";
 import { Box } from "@chakra-ui/react";
 import { Project } from "../../interfaces/projects";
@@ -17,7 +17,7 @@ const Home: NextPage<any> = ({ data }) => {
 
       <HeaderPage backButton={false} title="My Projects" />
       {data.map((project: Project, index: number) => (
-        <Box key={index}>
+        <Box key={index} my="2">
           <ProjectCard project={project} />
         </Box>
       ))}
@@ -27,7 +27,7 @@ const Home: NextPage<any> = ({ data }) => {
 
 export default Home;
 
-export const getStaticProps: GetStaticProps = async () => {
+export const getServerSideProps: GetServerSideProps = async () => {
   const data = await getProjects();
   return {
     props: {
