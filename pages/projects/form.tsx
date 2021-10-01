@@ -63,6 +63,8 @@ const Form: NextPage<{ data: People[] }> = ({ data }) => {
   return (
     <Flex flexDirection="column" textAlign="center">
       <HeaderPage
+        search={null}
+        setSearch={null}
         backButton={true}
         title={editable ? "Edit project" : "Add project"}
       />

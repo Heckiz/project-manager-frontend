@@ -1,5 +1,6 @@
-import { Flex, Image, Text } from "@chakra-ui/react";
+import { Box, Flex, Text } from "@chakra-ui/react";
 import React, { FC } from "react";
+import Image from "next/image";
 
 const PeopleCard: FC<{ name: string; picture: string }> = ({
   name,
@@ -7,12 +8,10 @@ const PeopleCard: FC<{ name: string; picture: string }> = ({
 }) => {
   return (
     <Flex alignItems="center">
-      <Image
-        h="6vh"
-        borderRadius="100%"
-        alt="image"
-        src={`https://i.pinimg.com/originals/e1/3e/32/e13e326952e46bbb76955c5dec72d168.jpg`} /// test image
-      />
+      <Box overflow="hidden" borderRadius="100%" h={14} w={14}>
+        <Image width="100%" height="100%" layout="responsive"
+        alt="image" src={picture} />
+      </Box>
       <Text mx="2" fontWeight="bold">
         {name}
       </Text>

@@ -16,7 +16,7 @@ const requests = {
   delete: (url: string) => instance.delete(url).then(responseBody),
 };
 
-const getProjects = (): Promise<Project[]> => requests.get("/projects");
+const getProjects = (name:string): Promise<Project[]> => requests.get(`/projects?name_contains=${name}`);
 
 const getProjectId = (id: string): Promise<Project> =>
   requests.get(`/projects/${id}`);
