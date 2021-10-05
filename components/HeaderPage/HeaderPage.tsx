@@ -2,6 +2,7 @@ import { Button, Flex, Text } from "@chakra-ui/react";
 import React, { Dispatch, FC, SetStateAction } from "react";
 import { useRouter } from "next/router";
 import { ImArrowLeft, ImPlus, ImSearch } from "react-icons/im";
+import Link from "next/link";
 const HeaderPage: FC<{
   title: string;
   backButton: boolean;
@@ -23,9 +24,11 @@ const HeaderPage: FC<{
       zIndex="4"
     >
       {backButton ? (
-        <Button onClick={() => route.replace("/projects")}>
-          <ImArrowLeft size={24} />
-        </Button>
+        <Link href="/projects" passHref>
+          <Button>
+            <ImArrowLeft size={24} />
+          </Button>
+        </Link>
       ) : (
         <Button
           bg="teal.200"
@@ -49,16 +52,17 @@ const HeaderPage: FC<{
         {title}
       </Text>
 
-      <Button
-        visibility={backButton ? "hidden" : "visible"}
-        m="2"
-        fontSize="xs"
-        bg="red.400"
-        onClick={() => route.replace("projects/form")}
-      >
-        <ImPlus />
-        <Text display={{ base: "none", lg: "block" }}>Add proyect</Text>
-      </Button>
+      <Link href="/projects/form" passHref>
+        <Button
+          visibility={backButton ? "hidden" : "visible"}
+          m="2"
+          fontSize="xs"
+          bg="red.400"
+        >
+          <ImPlus />
+          <Text display={{ base: "none", lg: "block" }}>Add proyect</Text>
+        </Button>
+      </Link>
     </Flex>
   );
 };
