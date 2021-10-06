@@ -14,7 +14,7 @@ import React, {
 } from "react";
 import { ImCross, ImSearch } from "react-icons/im";
 import { Project } from "../../interfaces/projects";
-import { getProjects } from "../../services/api";
+import { getProjectsByName } from "../../services/api";
 
 const SearchBar: FC<{
   search: boolean;
@@ -25,7 +25,7 @@ const SearchBar: FC<{
 
   const handleSearch = async (event: ChangeEvent<HTMLInputElement>) => {
     setInputValue(event.target.value);
-    const data = await getProjects(event.target.value);
+    const data = await getProjectsByName(event.target.value);
     setProjects(data);
   };
 

@@ -1,6 +1,5 @@
 import { Button, Flex, Text } from "@chakra-ui/react";
 import React, { Dispatch, FC, SetStateAction } from "react";
-import { useRouter } from "next/router";
 import { ImArrowLeft, ImPlus, ImSearch } from "react-icons/im";
 import Link from "next/link";
 const HeaderPage: FC<{
@@ -9,7 +8,6 @@ const HeaderPage: FC<{
   search: boolean | null;
   setSearch: Dispatch<SetStateAction<boolean>> | null;
 }> = ({ title, backButton, search, setSearch }) => {
-  const route = useRouter();
   return (
     <Flex
       overflow="hidden"

@@ -16,7 +16,14 @@ const requests = {
   delete: (url: string) => instance.delete(url).then(responseBody),
 };
 
-const getProjects = (name:string): Promise<Project[]> => requests.get(`/projects?name_contains=${name}`);
+const getProjectsByName = (name: string): Promise<Project[]> =>
+  requests.get(`/projects?name_contains=${name}`);
+
+const getProjects = (start: string, limit: string): Promise<Project[]> =>
+  requests.get(`/projects?_start=${start}&_limit=${limit}`);
+
+  
+const getProjectCount = (): Promise<number> => requests.get("/projects/count");
 
 const getProjectId = (id: string): Promise<Project> =>
   requests.get(`/projects/${id}`);
@@ -35,10 +42,12 @@ const updatedProject = (project: Project, id: string) =>
 
 export {
   getProjects,
+  getProjectsByName,
   getProjectId,
   createProject,
   getPeople,
   getPeopleId,
   deleteProject,
   updatedProject,
+  getProjectCount,
 };
